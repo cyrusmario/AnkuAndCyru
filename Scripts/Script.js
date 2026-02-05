@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DEVELOPER CONTROL: Set to 'true' to clear the status, or keep 'false' for normal operation
-    const FORCE_RESET = false;
+    const FORCE_RESET = true;
 
     if (FORCE_RESET) {
         localStorage.removeItem('sheSaidYes');
