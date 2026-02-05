@@ -15,16 +15,28 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Let document scroll */
+}
+
+/* Hide scrollbar */
+html::-webkit-scrollbar {
+    display: none;
 }
 
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--dark-bg);
     color: var(--text-light);
-    overflow-x: hidden;
-    overflow-y: auto;
     width: 100%;
+    min-height: 100vh;
+    overflow: visible;
+    /* Do not trap scroll in body */
+    position: relative;
 }
 
 .background-overlay {
@@ -39,7 +51,6 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    filter: brightness(0.8) contrast(1.1);
     filter: brightness(0.8) contrast(1.1);
     z-index: -2;
 }
@@ -74,6 +85,41 @@ body {
         transform: translateY(-120vh) rotate(360deg);
         opacity: 0;
     }
+
+    100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Floating Hearts (from JS) */
+.heart-particle {
+    position: fixed;
+    top: -20px;
+    z-index: 1000;
+    pointer-events: none;
+    /* Animation handled inline for duration/delay variability */
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.floating-heart {
+    position: fixed;
+    z-index: 1000;
+    pointer-events: none;
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
 }
 
 /* Hero Section */
@@ -85,7 +131,7 @@ body {
     align-items: center;
     text-align: center;
     padding: 20px;
-    scroll-snap-align: start;
+    padding: 20px;
     scroll-margin-top: 0;
 }
 
@@ -237,7 +283,7 @@ body {
     min-height: 80vh;
     display: flex;
     align-items: center;
-    scroll-snap-align: start;
+    align-items: center;
     scroll-margin-top: 20px;
 }
 
@@ -261,9 +307,10 @@ body {
 
 /* Yes Stamp Styling */
 .yes-stamp {
-    position: absolute;
-    top: 10%;
-    right: 10%;
+    position: fixed;
+    /* Fixed to viewport so it stays in corner even if scrolled (though usually just for hero) */
+    top: 50px;
+    right: 50px;
     transform: rotate(15deg);
     z-index: 10;
     pointer-events: none;
@@ -347,7 +394,8 @@ body {
     transform: translateY(30px);
     transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     will-change: transform, opacity;
-    scroll-snap-align: start;
+    will-change: transform, opacity;
+    /* Remove native snap alignment since we are doing it manually */
     scroll-margin-top: 50px;
 }
 
@@ -378,6 +426,12 @@ body {
 .memory-image img,
 .memory-video {
     width: 100%;
+    height: auto;
+    /* Allow natural height */
+    max-height: 80vh;
+    /* Prevent overly tall portrait images from taking too much space */
+    object-fit: contain;
+    /* Ensure full image is visible if it hits max constraints */
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transition: transform 0.5s ease;
