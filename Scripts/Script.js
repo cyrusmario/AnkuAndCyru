@@ -168,93 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
 
-    // --- Idle Auto-Scroll Logic ---
-    let idleTimer;
-    const IDLE_TIME = 20000; // 20 seconds
-    const scrollTargets = [];
-
-    // Gather all snapping targets
-    function updateScrollTargets() {
-        scrollTargets.length = 0;
-        scrollTargets.push(document.getElementById('hero'));
-        scrollTargets.push(document.getElementById('story'));
-        document.querySelectorAll('.memory-card').forEach(card => scrollTargets.push(card));
-        scrollTargets.push(document.querySelector('.final-note'));
-    }
-
-    function resetIdleTimer() {
-        clearTimeout(idleTimer);
-        // Only start timer if she said yes (content is visible)
-        if (localStorage.getItem('sheSaidYes') === 'true') {
-            idleTimer = setTimeout(autoScrollToNext, IDLE_TIME);
-        }
-    }
-
-    function autoScrollToNext() {
-        updateScrollTargets();
-        const viewportHeight = window.innerHeight;
-        const viewportCenter = window.scrollY + (viewportHeight / 2);
-
-        let currentIndex = -1;
-        let minDistance = Infinity;
-
-        // Find the element whose center is closest to the viewport center
-        for (let i = 0; i < scrollTargets.length; i++) {
-            const target = scrollTargets[i];
-            const targetRect = target.getBoundingClientRect();
-            // Calculate absolute top position relative to document
-            const targetTop = targetRect.top + window.scrollY;
-            const targetCenter = targetTop + (targetRect.height / 2);
-
-            const distance = Math.abs(targetCenter - viewportCenter);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                currentIndex = i;
-            }
-        }
-
-        // If we are "stuck" between two large sections, we might default to the previous one.
-        // If the closest one is actually *above* our center significantly, perform a check to move forward.
-        if (currentIndex !== -1) {
-            const target = scrollTargets[currentIndex];
-            const targetRect = target.getBoundingClientRect();
-            const targetCenter = (targetRect.top + window.scrollY) + (targetRect.height / 2);
-
-            // If we are perfectly centered (within 10px), we want the NEXT one
-            // If we are scrolling manually and stopped halfway, we want the One we are looking at to snap, or the next one?
-            // User requested "next memory". So if we are sitting on one, go next.
-            if (Math.abs(targetCenter - viewportCenter) < 50) {
-                currentIndex++;
-            }
-        } else {
-            currentIndex = 0;
-        }
-
-        let nextIndex = currentIndex;
-        if (nextIndex >= scrollTargets.length) {
-            nextIndex = 0;
-        } else if (nextIndex < 0) {
-            nextIndex = 0;
-        }
-
-        const nextTarget = scrollTargets[nextIndex];
-
-        if (nextTarget) {
-            // Memories should be centered, sections might differ but 'center' is generally safest for full-screen snapping
-            nextTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }
-
-    // Listen for user activity to reset timer
-    window.addEventListener('scroll', resetIdleTimer);
-    window.addEventListener('touchstart', resetIdleTimer);
-    window.addEventListener('mousedown', resetIdleTimer);
-
-    // Initial start if already accepted
-    if (localStorage.getItem('sheSaidYes') === 'true') {
-        resetIdleTimer();
-    }
+    // --- Auto-Scroll Removed ---
 
     // Add CSS for falling hearts if not already there
     const style = document.createElement('style');
@@ -300,6 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const playPauseBtn = document.getElementById('playPauseBtn');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const loopBtn = document.getElementById('loopBtn');
     const progressBar = document.getElementById('progressBar');
     const currentTimeEl = document.getElementById('currentTime');
     const totalDurationEl = document.getElementById('totalDuration');
@@ -365,9 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial State
     let currentSongIndex = 0;
-    let isPlaying = true;
+    let isPlaying = false; // Start paused or based on previous logic, usually paused until interaction
     let userVolume = 0.4;
     let isMuted = false;
+    let isShuffle = false;
+    let loopMode = 'playlist'; // 'playlist' (default) or 'song'
 
     // Load Initial Song
     loadSong(playlist[currentSongIndex]);
@@ -424,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 isPlaying = false;
                 updatePlayBtn();
                 clearInterval(fadeInterval);
-                bgMusic.volume = startVolume; // Restore volume internally
+                bgMusic.volume = startVolume;
             } else {
                 bgMusic.volume -= step;
             }
@@ -452,9 +370,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     playPauseBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent triggering interactions that restart music
+        e.stopPropagation();
         togglePlay();
-        resetIdleTimer();
     });
 
     // Track Progress
@@ -477,19 +394,17 @@ document.addEventListener('DOMContentLoaded', () => {
     progressBar.addEventListener('input', (e) => {
         const seekTime = (progressBar.value / 100) * bgMusic.duration;
         bgMusic.currentTime = seekTime;
-        resetIdleTimer();
     });
 
     // Volume Control
     volumeBar.addEventListener('input', (e) => {
-        clearInterval(fadeInterval); // Stop any fading if user manually changes volume
+        clearInterval(fadeInterval);
         userVolume = parseFloat(e.target.value);
         if (!isMuted) {
             bgMusic.volume = userVolume;
         }
         NORMAL_VOLUME = userVolume;
         updateVolumeIcon();
-        resetIdleTimer();
     });
 
     muteBtn.addEventListener('click', () => {
@@ -500,7 +415,6 @@ document.addEventListener('DOMContentLoaded', () => {
             bgMusic.volume = userVolume;
         }
         updateVolumeIcon();
-        resetIdleTimer();
     });
 
     function updateVolumeIcon() {
@@ -519,41 +433,95 @@ document.addEventListener('DOMContentLoaded', () => {
     // Play Song Helper
     function playSong() {
         loadSong(playlist[currentSongIndex]);
-        // Immediate play for playlist navigation, handling fade might be too slow for skipping
-        // But we want to maintain the "fade in" effect if moving from pause to play?
-        // Let's just standard play for now to be snappy.
         bgMusic.volume = isMuted ? 0 : userVolume;
         bgMusic.play();
         isPlaying = true;
         updatePlayBtn();
     }
 
-    // Next/Prev Buttons
-    prevBtn.addEventListener('click', () => {
-        currentSongIndex--;
-        if (currentSongIndex < 0) {
-            currentSongIndex = playlist.length - 1;
-        }
-        playSong();
-        resetIdleTimer();
+    // Shuffle Logic
+    shuffleBtn.addEventListener('click', () => {
+        isShuffle = !isShuffle;
+        shuffleBtn.classList.toggle('active', isShuffle);
     });
 
+    // Loop Logic
+    loopBtn.addEventListener('click', () => {
+        if (loopMode === 'playlist') {
+            loopMode = 'song';
+            loopBtn.classList.add('active'); // Active means "Repeat One"
+            // Optional: Change icon to represent '1' if you had one, but color change is fine
+            loopBtn.querySelector('i').className = 'fa-solid fa-repeat';
+            // Could use fa-1 or overlap, but standard icon + active color is commonly understood as "Repeated or Locked"
+            // Wait, standard UI:
+            // Grey Loop: Loop Off (Play once through)
+            // White/Color Loop: Loop Playlist
+            // White/Color Loop + 1: Loop Song
+
+            // User request: "select between loop song or loop playlist".
+            // So default is Loop Playlist. Button click -> Loop Song. Click again -> Loop Playlist.
+        } else {
+            loopMode = 'playlist';
+            loopBtn.classList.remove('active');
+        }
+    });
+
+    // Prev Button
+    prevBtn.addEventListener('click', () => {
+        if (bgMusic.currentTime > 3) {
+            bgMusic.currentTime = 0;
+        } else {
+            if (isShuffle) {
+                // Random index
+                currentSongIndex = Math.floor(Math.random() * playlist.length);
+            } else {
+                currentSongIndex--;
+                if (currentSongIndex < 0) {
+                    currentSongIndex = playlist.length - 1;
+                }
+            }
+            playSong();
+        }
+    });
+
+    // Next Button
     nextBtn.addEventListener('click', () => {
-        currentSongIndex++;
-        if (currentSongIndex > playlist.length - 1) {
-            currentSongIndex = 0;
+        if (isShuffle) {
+            let newIndex = currentSongIndex;
+            while (newIndex === currentSongIndex) {
+                newIndex = Math.floor(Math.random() * playlist.length);
+            }
+            currentSongIndex = newIndex;
+        } else {
+            currentSongIndex++;
+            if (currentSongIndex > playlist.length - 1) {
+                currentSongIndex = 0;
+            }
         }
         playSong();
-        resetIdleTimer();
     });
 
     // Auto-play next song when ended
     bgMusic.addEventListener('ended', () => {
-        currentSongIndex++;
-        if (currentSongIndex > playlist.length - 1) {
-            currentSongIndex = 0;
+        if (loopMode === 'song') {
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+        } else {
+            // Playlist Loop or Shuffle
+            if (isShuffle) {
+                let newIndex = currentSongIndex;
+                while (newIndex === currentSongIndex) {
+                    newIndex = Math.floor(Math.random() * playlist.length);
+                }
+                currentSongIndex = newIndex;
+            } else {
+                currentSongIndex++;
+                if (currentSongIndex > playlist.length - 1) {
+                    currentSongIndex = 0;
+                }
+            }
+            playSong();
         }
-        playSong();
     });
 
     // Sync UI on load

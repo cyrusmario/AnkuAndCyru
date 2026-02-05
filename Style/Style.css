@@ -15,7 +15,6 @@
 }
 
 html {
-    scroll-snap-type: y proximity;
     scroll-behavior: smooth;
 }
 
@@ -750,6 +749,11 @@ body {
 
 .control-btn:hover {
     color: var(--text-light);
+}
+
+.control-btn.active {
+    color: var(--primary-pink);
+    text-shadow: 0 0 8px rgba(255, 77, 109, 0.6);
 }
 
 .play-btn {

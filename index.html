@@ -44,7 +44,6 @@
 
     <!-- Content Section (Hidden until Yes) -->
     <section id="content" class="content-section hidden">
-        
         <!-- Our Story Section -->
         <div id="story" class="story-section">
             <div class="container">
@@ -89,7 +88,7 @@
                         </p>
                     </div>
                     <div class="memory-image">
-                        <video muted loop controls class="memory-video">
+                        <video muted loop controls class="memory-video" preload="none">
                             <source src="Assets/Videos/memory2.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -227,7 +226,7 @@
                             that photos just can't capture. Every second of this video is a treasure to me!</p>
                     </div>
                     <div class="memory-image">
-                        <video muted loop controls class="memory-video">
+                        <video muted loop controls class="memory-video" preload="none">
                             <source src="Assets/Videos/memory12.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -237,7 +236,7 @@
                 <!-- Memory 13 -->
                 <div class="memory-card reveal">
                     <div class="memory-image">
-                        <video loop controls class="memory-video">
+                        <video loop controls class="memory-video" preload="none">
                             <source src="Assets/Videos/memory13.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -263,8 +262,9 @@
     </section>
 
     <!-- Background Music -->
-    <audio id="bgMusic" loop>
-        <source src="Assets/Sang Rahiyo🫶.webm" type="audio/webm">
+    <!-- Background Music -->
+    <audio id="bgMusic">
+        <source src="Assets/Songs/Sang Rahiyo🫶.webm" type="audio/webm">
         Your browser does not support the audio element.
     </audio>
 
@@ -282,6 +282,9 @@
 
         <div class="player-controls">
             <div class="control-buttons">
+                <button id="shuffleBtn" type="button" class="control-btn" title="Shuffle" aria-label="Shuffle">
+                    <i class="fa-solid fa-shuffle"></i>
+                </button>
                 <button id="prevBtn" type="button" class="control-btn" title="Previous" aria-label="Previous Song"><i
                         class="fa-solid fa-backward-step"></i></button>
                 <button id="playPauseBtn" type="button" class="control-btn play-btn" title="Play/Pause"
@@ -290,6 +293,9 @@
                 </button>
                 <button id="nextBtn" type="button" class="control-btn" title="Next" aria-label="Next Song"><i
                         class="fa-solid fa-forward-step"></i></button>
+                <button id="loopBtn" type="button" class="control-btn" title="Loop Mode" aria-label="Loop Mode">
+                    <i class="fa-solid fa-repeat"></i>
+                </button>
             </div>
             <div class="progress-area">
                 <span id="currentTime" class="time-text">0:00</span>
