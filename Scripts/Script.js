@@ -187,17 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle "Yes" Button Click
     yesBtn.addEventListener('click', () => {
-        const now = new Date();
-        const timeString = now.toLocaleDateString('en-GB', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }) + ' at ' + now.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        });
+        const timeString = '14th February 2026';
 
         localStorage.setItem('sheSaidYes', 'true');
         localStorage.setItem('sheSaidYesTime', timeString);
@@ -216,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollIndicator.style.display = 'flex';
 
         if (timestamp) {
-            yesTimestamp.textContent = `Captured on: ${timestamp}`;
+            yesTimestamp.textContent = timestamp;
         }
 
         // Hide/Disable buttons once "Yes" is confirmed
