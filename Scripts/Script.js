@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DEVELOPER CONTROL: Set to 'true' to clear the status, or keep 'false' for normal operation
-    const FORCE_RESET = false;
-
-    if (FORCE_RESET) {
-        localStorage.removeItem('sheSaidYes');
-        localStorage.removeItem('sheSaidYesTime');
-    }
+    // DEVELOPER CONTROL:
+    // true  = Force "She Said Yes" state (Stamp & Content visible)
+    // false = Force "Initial" state (Yes/No Buttons visible)
+    // null  = Use Browser Memory (Normal User Experience)
+    const SHOW_ACCEPTED_VIEW = false;
 
 
     const yesBtn = document.getElementById('yesBtn');
@@ -15,6 +13,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const yesStamp = document.getElementById('yesStamp');
     const yesTimestamp = document.getElementById('yesTimestamp');
     const bgMusic = document.getElementById('bgMusic');
+    const loadingScreen = document.getElementById('loadingScreen');
+
+    // --- Loading Screen Logic ---
+    const hasVisited = localStorage.getItem('hasVisited');
+
+    if (hasVisited) {
+        // Not first time - hide immediately
+        loadingScreen.style.display = 'none';
+    } else {
+        // First time - show waiting animation
+        window.addEventListener('load', () => {
+            // Wait a bit for effect even if fast load
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                // Remove from DOM after fade out
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    localStorage.setItem('hasVisited', 'true');
+                }, 800);
+            }, 2500); // 2.5s simulated loading time
+        });
+    }
 
     // Set initial volumes
     const DUCKED_VOLUME = 0.05;
@@ -476,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Background Hearts Animation ---
     function initBackgroundHearts() {
-        const heartCount = 20; // Number of background hearts
+        const heartCount = 40; // Number of background hearts
         const container = document.body;
 
         for (let i = 0; i < heartCount; i++) {
@@ -574,9 +594,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial State
     let currentSongIndex = 0;
     let isPlaying = false;
-    let userVolume = 0.4;
+    let userVolume = 0.5;
     let isMuted = false;
-    let isShuffle = false;
+    let isShuffle = true;
     let loopMode = 'playlist'; // 'playlist', 'song'
     let fadeInterval;
 
@@ -771,6 +791,8 @@ document.addEventListener('DOMContentLoaded', () => {
     prevBtn.addEventListener('click', playPrevSong);
     nextBtn.addEventListener('click', playNextSong);
 
+    shuffleBtn.classList.toggle('active', isShuffle);
+
     shuffleBtn.addEventListener('click', () => {
         isShuffle = !isShuffle;
         shuffleBtn.classList.toggle('active', isShuffle);
@@ -829,41 +851,92 @@ document.addEventListener('DOMContentLoaded', () => {
     updateVolumeIcon();
 
     // Check if she already said yes (Moved to end to ensure Media Controller is ready)
-    const savedTime = localStorage.getItem('sheSaidYesTime');
-    const hasSaidYes = localStorage.getItem('sheSaidYes') === 'true';
+    let hasSaidYes;
+    if (SHOW_ACCEPTED_VIEW !== null) {
+        hasSaidYes = SHOW_ACCEPTED_VIEW;
+    } else {
+        hasSaidYes = localStorage.getItem('sheSaidYes') === 'true';
+    }
+
+    // Use saved time or default if forcing state
+    const savedTime = localStorage.getItem('sheSaidYesTime') || '14th February 2026';
 
     if (hasSaidYes) {
         showSuccessState(false, savedTime);
 
-        // Try to autoplay immediately
-        if (!FORCE_RESET) {
-            // Attempt immediate play
-            const attemptPlay = () => {
-                if (bgMusic.paused) {
-                    playAudio();
-                }
-            };
+        // Try to autoplay immediately (Autoplay Logic)
+        // Robust Autoplay Logic (Re-applied)
+        const robustAutoplay = async () => {
+            try {
+                // 1. Try Unmuted Autoplay (Best Case)
+                bgMusic.volume = userVolume;
+                await bgMusic.play();
 
-            attemptPlay();
+                // Success! Update UI
+                isPlaying = true;
+                updatePlayBtn();
+                document.querySelector('.album-art').classList.add('rotating');
+                document.title = `Now Playing: '${playlist[currentSongIndex].title}'`;
 
-            // Fallback for browser blocking policies (User Gesture Required)
-            // We attach to capture phase to catch events early
-            const playMusicAndCleanup = () => {
-                attemptPlay();
+            } catch (domException) {
+                console.warn("Autoplay blocked. Switching to Muted Autoplay fallback...");
 
-                // Remove listeners only if play was successful or we want to stop trying every event
-                // But better to keep trying until it plays
-                if (!bgMusic.paused) {
-                    ['click', 'mousedown', 'keydown', 'touchstart', 'wheel'].forEach(evt =>
-                        document.removeEventListener(evt, playMusicAndCleanup, { capture: true })
+                // 2. Try Muted Autoplay (Fallback)
+                try {
+                    bgMusic.muted = true;
+                    await bgMusic.play();
+
+                    // Success (Muted)! Update UI
+                    isPlaying = true;
+                    updatePlayBtn();
+                    document.querySelector('.album-art').classList.add('rotating');
+                    document.title = `Now Playing: '${playlist[currentSongIndex].title}'`;
+
+                    // 3. Listener to Unmute on FIRST interaction
+                    const unmuteOnInteract = () => {
+                        bgMusic.muted = false;
+                        bgMusic.volume = userVolume;
+                        console.log("Audio Unmuted by interaction");
+
+                        // Remove listeners
+                        ['click', 'keydown', 'touchstart', 'wheel'].forEach(evt =>
+                            document.removeEventListener(evt, unmuteOnInteract, { capture: true })
+                        );
+                    };
+
+                    ['click', 'keydown', 'touchstart', 'wheel'].forEach(evt =>
+                        document.addEventListener(evt, unmuteOnInteract, { capture: true, once: true })
+                    );
+
+                } catch (mutedException) {
+                    console.warn("Muted autoplay also blocked. Waiting for user interaction to start...", mutedException);
+
+                    // 3. Last Resort: passive wait for interaction to Start Playing
+                    const playOnInteract = async () => {
+                        try {
+                            bgMusic.muted = false;
+                            bgMusic.volume = userVolume;
+                            await bgMusic.play();
+                            console.log("Audio started via interaction fallback");
+
+                            isPlaying = true;
+                            updatePlayBtn();
+                            document.querySelector('.album-art').classList.add('rotating');
+                            document.title = `Now Playing: '${playlist[currentSongIndex].title}'`;
+                        } catch (e) {
+                            console.error("Play failed on interaction", e);
+                        }
+                    };
+
+                    // Add one-time listeners
+                    ['click', 'keydown', 'touchstart', 'wheel'].forEach(evt =>
+                        document.addEventListener(evt, playOnInteract, { capture: true, once: true })
                     );
                 }
-            };
+            }
+        };
 
-            ['click', 'mousedown', 'keydown', 'touchstart', 'wheel'].forEach(evt =>
-                document.addEventListener(evt, playMusicAndCleanup, { capture: true, once: false })
-            );
-        }
+        robustAutoplay();
     }
 });
 
