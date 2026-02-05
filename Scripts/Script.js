@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // true  = Force "She Said Yes" state (Stamp & Content visible)
     // false = Force "Initial" state (Yes/No Buttons visible)
     // null  = Use Browser Memory (Normal User Experience)
-    const SHOW_ACCEPTED_VIEW = false;
+    const SHOW_ACCEPTED_VIEW = true;
 
 
     const yesBtn = document.getElementById('yesBtn');
