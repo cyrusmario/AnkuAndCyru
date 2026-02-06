@@ -7,12 +7,30 @@
     <meta name="description" content="A special digital memory lane for the most wonderful girl.">
     <title>Anku and Cyru</title>
     <link rel="icon" type="image/png" href="Assets/website_icon.png">
-    <link rel="stylesheet" href="Style/Style.css">
+
+    <!-- Preconnect to external domains for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="Style/Style.css" as="style">
+    <link rel="stylesheet" href="Style/Style.css">
+
+    <!-- Preload critical fonts -->
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;600&display=swap"
+        as="style">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;600&display=swap"
         rel="stylesheet">
+
+    <!-- Preload Font Awesome icons -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Preload critical images -->
+    <link rel="preload" href="Assets/Images/hero_bg_new.jpg" as="image">
+    <link rel="preload" href="Assets/website_icon.png" as="image">
 </head>
 
 <body>
@@ -32,7 +50,11 @@
     <div id="loadingScreen" class="loading-screen">
         <div class="loader-content">
             <div class="heart-spinner">❤️</div>
-            <p>Loading our distinct world...</p>
+            <p id="loadingText">Loading our distinct world...</p>
+            <div class="loading-progress-container">
+                <div class="loading-progress-bar" id="loadingProgress"></div>
+            </div>
+            <span class="loading-percentage" id="loadingPercentage">0%</span>
         </div>
     </div>
 
@@ -363,7 +385,7 @@
         </div>
     </div>
 
-    <script src="Scripts/Script.js"></script>
+    <script src="Scripts/Script.js" defer></script>
 
     <!-- SVG Heart Mask Definition -->
     <svg id="heartMaskSvg">

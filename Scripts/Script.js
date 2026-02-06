@@ -26,16 +26,110 @@ document.addEventListener('DOMContentLoaded', () => {
     const mediaController = document.getElementById('mediaController');
     const navButtons = [navHome, navGallery];
 
-    // --- Loading Screen Logic ---
+    // --- Enhanced Loading Screen Logic with Progress Tracking ---
     const hasVisited = localStorage.getItem('hasVisited');
+    const loadingProgressBar = document.getElementById('loadingProgress');
+    const loadingPercentage = document.getElementById('loadingPercentage');
+    const loadingText = document.getElementById('loadingText');
+
+    // Function to update progress
+    function updateProgress(percent, text) {
+        if (loadingProgressBar) {
+            loadingProgressBar.style.width = percent + '%';
+        }
+        if (loadingPercentage) {
+            loadingPercentage.textContent = Math.round(percent) + '%';
+        }
+        if (text && loadingText) {
+            loadingText.textContent = text;
+        }
+    }
+
+    // Function to wait for all critical resources with progress tracking
+    async function waitForCriticalResources() {
+        const resources = [];
+        let loadedCount = 0;
+
+        // Helper to track resource loading
+        const trackResource = (promise, label) => {
+            resources.push(
+                promise.then(() => {
+                    loadedCount++;
+                    const progress = (loadedCount / resources.length) * 100;
+                    updateProgress(progress, `Loading ${label}...`);
+                }).catch(() => {
+                    loadedCount++;
+                    const progress = (loadedCount / resources.length) * 100;
+                    updateProgress(progress, `Loading ${label}...`);
+                })
+            );
+        };
+
+        // Wait for fonts to load
+        if (document.fonts) {
+            trackResource(document.fonts.ready, 'fonts');
+        }
+
+        // Wait for all images in the hero section and first few memory cards
+        const criticalImages = document.querySelectorAll('img[src*="hero_bg"], img[src*="website_icon"], .memory-card:nth-child(-n+3) img');
+        criticalImages.forEach((img, index) => {
+            if (!img.complete) {
+                trackResource(
+                    new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                    }),
+                    `image ${index + 1}`
+                );
+            }
+        });
+
+        // Wait for videos to be ready
+        const criticalVideos = document.querySelectorAll('.memory-card:nth-child(-n+3) video');
+        criticalVideos.forEach((video, index) => {
+            if (video.readyState < 3) {
+                trackResource(
+                    new Promise(resolve => {
+                        video.onloadeddata = resolve;
+                        video.onerror = resolve;
+                    }),
+                    `video ${index + 1}`
+                );
+            }
+        });
+
+        // Wait for CSS and page load
+        trackResource(
+            new Promise(resolve => {
+                if (document.readyState === 'complete') {
+                    resolve();
+                } else {
+                    window.addEventListener('load', resolve);
+                }
+            }),
+            'page styles'
+        );
+
+        // Start at 10% to show immediate response
+        updateProgress(10, 'Initializing...');
+
+        // Wait for all promises with a timeout fallback
+        await Promise.race([
+            Promise.all(resources),
+            new Promise(resolve => setTimeout(resolve, 5000)) // Max 5s wait
+        ]);
+
+        // Ensure we show 100% before hiding
+        updateProgress(100, 'Ready!');
+    }
 
     if (hasVisited) {
         // Not first time - hide immediately
         loadingScreen.style.display = 'none';
     } else {
-        // First time - show waiting animation
-        window.addEventListener('load', () => {
-            // Wait a bit for effect even if fast load
+        // First time - wait for resources then show smooth transition
+        waitForCriticalResources().then(() => {
+            // Give a moment for smooth rendering
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
                 // Remove from DOM after fade out
@@ -43,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadingScreen.style.display = 'none';
                     localStorage.setItem('hasVisited', 'true');
                 }, 800);
-            }, 2500); // 2.5s simulated loading time
+            }, 500); // Small delay to ensure everything is painted
         });
     }
 
