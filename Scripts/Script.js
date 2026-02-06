@@ -730,9 +730,21 @@ document.addEventListener('DOMContentLoaded', () => {
             art: "Assets/website_icon.png"
         },
         {
+            title: "Main Tenu Samjhawan 🎶",
+            artist: "Arijit Singh, Shreya Ghoshal",
+            src: "Assets/Songs/MainTenuSamjhanwa.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
             title: "Dandelions 🌼",
             artist: "Ruth B.",
             src: "Assets/Songs/Dandelions🌼.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tera Ban Jaunga 💍",
+            artist: "Akhil",
+            src: "Assets/Songs/TeraBanJaunga.webm",
             art: "Assets/website_icon.png"
         },
         {
@@ -742,9 +754,27 @@ document.addEventListener('DOMContentLoaded', () => {
             art: "Assets/website_icon.png"
         },
         {
+            title: "Kho Gaye Hum Kahan 🌌",
+            artist: "Jasleen Royal, Prateek Kuhad",
+            src: "Assets/Songs/KhoGayeHumKahan.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
             title: "Perfect 💍",
             artist: "Ed Sheeran",
             src: "Assets/Songs/Perfect.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tum Hi Ho 💖",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/TumHiHo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Chahun Main Ya Naa 💭",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/ChahunMainYaNaa.webm",
             art: "Assets/website_icon.png"
         },
         {
@@ -754,9 +784,21 @@ document.addEventListener('DOMContentLoaded', () => {
             art: "Assets/website_icon.png"
         },
         {
+            title: "Bakhuda Tumhi Ho 🙏",
+            artist: "Atif Aslam, Alka Yagnik",
+            src: "Assets/Songs/BakhudaTumHiHo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
             title: "Photograph 📸",
             artist: "Ed Sheeran",
             src: "Assets/Songs/Photograph.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Be Intehaan 🌙",
+            artist: "Sunidhi Chauhan, Atif Aslam",
+            src: "Assets/Songs/BeIntehan.webm",
             art: "Assets/website_icon.png"
         },
         {
@@ -766,11 +808,108 @@ document.addEventListener('DOMContentLoaded', () => {
             art: "Assets/website_icon.png"
         },
         {
+            title: "Dil Kyun Yeh Mera Shor Kare 💓",
+            artist: "K.K.",
+            src: "Assets/Songs/DilKyunYehMeraShorKare.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
             title: "I Think They Call This Love",
             artist: "Elliot James Reay",
             src: "Assets/Songs/I Think They Call This Love.webm",
             art: "Assets/website_icon.png"
+        },
+        {
+            title: "Bheegi Si Bhaagi Si ☔",
+            artist: "Udit Narayan, Shreya Ghoshal",
+            src: "Assets/Songs/BheegiSiBhaagiSi.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Darasal ✨",
+            artist: "Atif Aslam",
+            src: "Assets/Songs/Darasal.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Lae Dooba 🌊",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/LaeDooba.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Love Me Thoda Aur 💞",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/LoveMeThodaAur.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Mera Pehla Pehla Pyaar 💝",
+            artist: "K.K.",
+            src: "Assets/Songs/MeraPehlaPehlaPyaar.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Nazm Nazm 📜",
+            artist: "Arko",
+            src: "Assets/Songs/NazmNazm.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Pehli Nazar Mein 👀",
+            artist: "Atif Aslam",
+            src: "Assets/Songs/PehliNazarMein.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Raabta 🔗",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/Raabta.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Soniyo 🌸",
+            artist: "Shreya Ghoshal",
+            src: "Assets/Songs/Soniyo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Subhanallah 🌟",
+            artist: "Sreeram, Shilpa Rao",
+            src: "Assets/Songs/Subhanallah.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Sukoon Mila 🕊️",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/SukoonMila.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Te Amo 🌹",
+            artist: "Ash King, Shashaa Tirupati",
+            src: "Assets/Songs/TeAmo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tera Chehra 😍",
+            artist: "Adnan Sami",
+            src: "Assets/Songs/TeraChehra.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tu Hain Tho 🎵",
+            artist: "Pritam, Rahul Mishra",
+            src: "Assets/Songs/TuHainTho.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tum Mile 🌈",
+            artist: "Neeraj Shridhar",
+            src: "Assets/Songs/TumMile.webm",
+            art: "Assets/website_icon.png"
         }
+
     ];
 
     // Initial State
@@ -778,7 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPlaying = false;
     let userVolume = 0.5;
     let isMuted = false;
-    let isShuffle = true;
+    let isShuffle = false;
     let loopMode = 'playlist'; // 'playlist', 'song'
     let fadeInterval;
 
