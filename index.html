@@ -16,6 +16,18 @@
 </head>
 
 <body>
+    <!-- Side Navigation -->
+    <nav class="side-nav hidden-nav" id="sideNav">
+        <button id="navHome" type="button" class="nav-btn active" title="Home" aria-label="Go to Home">
+            <i class="fa-solid fa-house"></i>
+            <span class="nav-text">Home</span>
+        </button>
+        <button id="navGallery" type="button" class="nav-btn" title="Gallery" aria-label="Go to Gallery">
+            <i class="fa-solid fa-images"></i>
+            <span class="nav-text">Gallery</span>
+        </button>
+    </nav>
+
     <!-- Loading Screen -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loader-content">
@@ -66,7 +78,7 @@
             </div>
         </div>
 
-        <div class="container">
+        <div id="gallery" class="container">
             <h2 class="section-title">Our Best Moments</h2>
             <div class="timeline">
 
@@ -275,7 +287,7 @@
 
 
     <!-- Media Controller -->
-    <div class="media-controller">
+    <div class="media-controller hidden-player" id="mediaController">
         <div class="song-info">
             <div class="album-art-wrapper">
                 <img src="Assets/website_icon.png" alt="Album Art" class="album-art">
@@ -318,6 +330,36 @@
                     class="fa-solid fa-volume-high"></i></button>
             <input type="range" id="volumeBar" min="0" max="1" step="0.01" value="0.4" class="volume-slider"
                 aria-label="Volume Control">
+        </div>
+    </div>
+
+    <!-- Photo Gallery Modal -->
+    <div id="photoGallery" class="gallery-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-scroll-container">
+                <div class="modal-header">
+                    <h2 class="section-title">Our Memory Vault</h2>
+                    <button id="closeGallery" type="button" class="close-btn" aria-label="Close Gallery">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Images will be injected here by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="imageLightbox" class="lightbox-modal">
+        <div class="lightbox-overlay"></div>
+        <div class="lightbox-content">
+            <button id="closeLightbox" type="button" class="close-btn lightbox-close" aria-label="Close Lightbox">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="focusedImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                alt="Focused Memory">
         </div>
     </div>
 

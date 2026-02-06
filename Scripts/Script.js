@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // true  = Force "She Said Yes" state (Stamp & Content visible)
     // false = Force "Initial" state (Yes/No Buttons visible)
     // null  = Use Browser Memory (Normal User Experience)
-    const SHOW_ACCEPTED_VIEW = true;
+    const SHOW_ACCEPTED_VIEW = null;
 
 
     const yesBtn = document.getElementById('yesBtn');
@@ -14,6 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const yesTimestamp = document.getElementById('yesTimestamp');
     const bgMusic = document.getElementById('bgMusic');
     const loadingScreen = document.getElementById('loadingScreen');
+    const navHome = document.getElementById('navHome');
+    const navGallery = document.getElementById('navGallery');
+    const photoGallery = document.getElementById('photoGallery');
+    const closeGallery = document.getElementById('closeGallery');
+    const galleryGrid = document.getElementById('galleryGrid');
+    const imageLightbox = document.getElementById('imageLightbox');
+    const focusedImage = document.getElementById('focusedImage');
+    const closeLightbox = document.getElementById('closeLightbox');
+    const sideNav = document.getElementById('sideNav');
+    const mediaController = document.getElementById('mediaController');
+    const navButtons = [navHome, navGallery];
 
     // --- Loading Screen Logic ---
     const hasVisited = localStorage.getItem('hasVisited');
@@ -61,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Keyboard Event
             window.addEventListener('keydown', (e) => {
+                if (photoGallery.classList.contains('active') || imageLightbox.classList.contains('active')) return;
                 const keys = ['ArrowUp', 'ArrowDown', ' ', 'PageUp', 'PageDown'];
                 if (keys.includes(e.key)) {
                     e.preventDefault();
@@ -79,10 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { passive: false });
 
             window.addEventListener('touchmove', e => {
+                if (photoGallery.classList.contains('active') || imageLightbox.classList.contains('active')) return;
                 e.preventDefault(); // Prevent native scroll
             }, { passive: false });
 
             window.addEventListener('touchend', e => {
+                if (photoGallery.classList.contains('active') || imageLightbox.classList.contains('active')) return;
                 const touchEndY = e.changedTouches[0].clientY;
                 const diff = touchStartY - touchEndY;
                 if (Math.abs(diff) > 50) { // Threshold
@@ -116,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         handleScroll(e) {
+            if (photoGallery.classList.contains('active') || imageLightbox.classList.contains('active')) return;
             e.preventDefault();
             if (this.isScrolling) return;
 
@@ -236,8 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Indicate scrolling is unlocked instead of auto-scrolling
         const scrollText = scrollIndicator.querySelector('p');
         if (scrollText) {
-            scrollText.textContent = "Unlocking our story... Scroll down ❤️";
+            scrollText.textContent = "Unlocking our story... ❤️";
         }
+
+        // Show Nav and Player with sliding animation
+        if (sideNav) sideNav.classList.remove('hidden-nav');
+        if (mediaController) mediaController.classList.remove('hidden-player');
 
         // Update scroll targets now that content is visible
         setTimeout(() => {
@@ -373,6 +392,75 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollManager.init();
     // Initialize auto scroll manager
     autoScrollManager.init();
+
+    navHome.addEventListener('click', () => {
+        if (photoGallery.classList.contains('active')) {
+            toggleGallery();
+        }
+        scrollManager.currentIndex = 0;
+        scrollManager.scrollToTarget(scrollManager.targets[0]);
+    });
+
+    navGallery.addEventListener('click', () => {
+        toggleGallery();
+    });
+
+    closeGallery.addEventListener('click', toggleGallery);
+
+    // Close on overlay click
+    document.querySelector('.modal-overlay').addEventListener('click', toggleGallery);
+
+    function toggleGallery() {
+        const isActive = photoGallery.classList.toggle('active');
+        if (isActive) {
+            document.body.style.overflow = 'hidden'; // Trap scroll
+            navGallery.classList.add('active');
+        } else {
+            document.body.style.overflow = ''; // Release scroll
+            navGallery.classList.remove('active');
+        }
+    }
+
+    // --- Lightbox Logic ---
+    function toggleLightbox(imgSrc = '') {
+        const isActive = imageLightbox.classList.toggle('active');
+        if (isActive) {
+            focusedImage.src = imgSrc;
+        } else {
+            // We can clear src after fade out if needed
+        }
+    }
+
+    closeLightbox.addEventListener('click', () => toggleLightbox());
+    document.querySelector('.lightbox-overlay').addEventListener('click', () => toggleLightbox());
+
+
+    // Populate Gallery
+    const galleryImages = [
+        'IMG-20260117-WA0011.jpg', 'IMG-20260117-WA0013.jpg', 'IMG-20260117-WA0014.jpg',
+        'IMG-20260117-WA0015.jpg', 'IMG-20260118-WA0035.jpg', 'IMG-20260118-WA0037.jpg',
+        'IMG-20260119-WA0012.jpg', 'IMG-20260119-WA0015.jpg', 'IMG-20260119-WA0022.jpg',
+        'IMG-20260119-WA0023.jpg', 'IMG20250604200831~2.jpg', 'IMG20250605105032.jpg',
+        'IMG20250605105038.jpg', 'IMG20251130160325~2.jpg', 'IMG20251130171445~2.jpg',
+        'IMG20251230172446.jpg'
+    ];
+
+    galleryImages.forEach(imgName => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        const img = document.createElement('img');
+        img.src = `Assets/Gallery/${imgName}`;
+        img.alt = 'Memory Item';
+        img.loading = 'lazy';
+        item.appendChild(img);
+
+        // Add click listener for lightbox
+        item.addEventListener('click', () => {
+            toggleLightbox(img.src);
+        });
+
+        galleryGrid.appendChild(item);
+    });
 
     // Reveal Memory Cards on Scroll
     const observerOptions = {
