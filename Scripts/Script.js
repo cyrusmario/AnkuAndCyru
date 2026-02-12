@@ -26,6 +26,231 @@ document.addEventListener('DOMContentLoaded', () => {
     const mediaController = document.getElementById('mediaController');
     const navButtons = [navHome, navGallery];
 
+    // --- Developer Controls ---
+    const MEMORY_CONTROLS = {
+        'memory1': true,
+        'memory2': true,
+        'memory3': true,
+        'memory4': true,
+        'memory5': true,
+        'memory6': true,
+        'memory7': true,
+        'memory8': true,
+        'memory9': true,
+        'memory10': true,
+        'memory11': true,
+        'memory12': true,
+        'memory13': true
+    };
+
+    // Apply Memory Visibility
+    Object.keys(MEMORY_CONTROLS).forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !MEMORY_CONTROLS[id]) {
+            el.style.display = 'none';
+        }
+    });
+
+    // --- Data Sources (Hoisted for Preloading) ---
+    const galleryImages = [
+        'IMG-20260117-WA0011.jpg', 'IMG-20260117-WA0013.jpg', 'IMG-20260117-WA0014.jpg',
+        'IMG-20260117-WA0015.jpg', 'IMG-20260118-WA0035.jpg', 'IMG-20260118-WA0037.jpg',
+        'IMG-20260119-WA0012.jpg', 'IMG-20260119-WA0015.jpg', 'IMG-20260119-WA0022.jpg',
+        'IMG-20260119-WA0023.jpg', 'IMG20250604200831~2.jpg', 'IMG20250605105032.jpg',
+        'IMG20250605105038.jpg', 'IMG20251130160325~2.jpg', 'IMG20251130171445~2.jpg',
+        'IMG20251230172446.jpg'
+    ];
+
+    const playlist = [
+        {
+            title: "Sang Rahiyo 🫶",
+            artist: "Anku & Cyru",
+            src: "Assets/Songs/Sang Rahiyo🫶.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Main Tenu Samjhawan 🎶",
+            artist: "Arijit Singh, Shreya Ghoshal",
+            src: "Assets/Songs/MainTenuSamjhanwa.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Dandelions 🌼",
+            artist: "Ruth B.",
+            src: "Assets/Songs/Dandelions🌼.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tera Ban Jaunga 💍",
+            artist: "Akhil",
+            src: "Assets/Songs/TeraBanJaunga.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "10,000 Hours 🕒",
+            artist: "Dan + Shay, Justin Bieber",
+            src: "Assets/Songs/10,000 Hours.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Kho Gaye Hum Kahan 🌌",
+            artist: "Jasleen Royal, Prateek Kuhad",
+            src: "Assets/Songs/KhoGayeHumKahan.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Perfect 💍",
+            artist: "Ed Sheeran",
+            src: "Assets/Songs/Perfect.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tum Hi Ho 💖",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/TumHiHo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Chahun Main Ya Naa 💭",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/ChahunMainYaNaa.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "A Thousand Years ⏳",
+            artist: "Christina Perri",
+            src: "Assets/Songs/A Thousand Years.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Bakhuda Tumhi Ho 🙏",
+            artist: "Atif Aslam, Alka Yagnik",
+            src: "Assets/Songs/BakhudaTumHiHo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Photograph 📸",
+            artist: "Ed Sheeran",
+            src: "Assets/Songs/Photograph.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Be Intehaan 🌙",
+            artist: "Sunidhi Chauhan, Atif Aslam",
+            src: "Assets/Songs/BeIntehan.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "All of Me",
+            artist: "John Legend",
+            src: "Assets/Songs/All of Me.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Dil Kyun Yeh Mera Shor Kare 💓",
+            artist: "K.K.",
+            src: "Assets/Songs/DilKyunYehMeraShorKare.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "I Think They Call This Love",
+            artist: "Elliot James Reay",
+            src: "Assets/Songs/I Think They Call This Love.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Bheegi Si Bhaagi Si ☔",
+            artist: "Udit Narayan, Shreya Ghoshal",
+            src: "Assets/Songs/BheegiSiBhaagiSi.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Darasal ✨",
+            artist: "Atif Aslam",
+            src: "Assets/Songs/Darasal.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Lae Dooba 🌊",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/LaeDooba.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Love Me Thoda Aur 💞",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/LoveMeThodaAur.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Mera Pehla Pehla Pyaar 💝",
+            artist: "K.K.",
+            src: "Assets/Songs/MeraPehlaPehlaPyaar.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Nazm Nazm 📜",
+            artist: "Arko",
+            src: "Assets/Songs/NazmNazm.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Pehli Nazar Mein 👀",
+            artist: "Atif Aslam",
+            src: "Assets/Songs/PehliNazarMein.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Raabta 🔗",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/Raabta.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Soniyo 🌸",
+            artist: "Shreya Ghoshal",
+            src: "Assets/Songs/Soniyo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Subhanallah 🌟",
+            artist: "Sreeram, Shilpa Rao",
+            src: "Assets/Songs/Subhanallah.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Sukoon Mila 🕊️",
+            artist: "Arijit Singh",
+            src: "Assets/Songs/SukoonMila.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Te Amo 🌹",
+            artist: "Ash King, Shashaa Tirupati",
+            src: "Assets/Songs/TeAmo.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tera Chehra 😍",
+            artist: "Adnan Sami",
+            src: "Assets/Songs/TeraChehra.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tu Hain Tho 🎵",
+            artist: "Pritam, Rahul Mishra",
+            src: "Assets/Songs/TuHainTho.webm",
+            art: "Assets/website_icon.png"
+        },
+        {
+            title: "Tum Mile 🌈",
+            artist: "Neeraj Shridhar",
+            src: "Assets/Songs/TumMile.webm",
+            art: "Assets/website_icon.png"
+        }
+    ];
+
+
     // --- Enhanced Loading Screen Logic with Progress Tracking ---
     const hasVisited = localStorage.getItem('hasVisited');
     const loadingProgressBar = document.getElementById('loadingProgress');
@@ -45,90 +270,176 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to wait for all critical resources with progress tracking
-    async function waitForCriticalResources() {
+    // Function to wait for ALL resources with progress tracking
+    async function preloadAllAssets() {
         const resources = [];
         let loadedCount = 0;
+        let totalResources = 0;
 
         // Helper to track resource loading
         const trackResource = (promise, label) => {
             resources.push(
                 promise.then(() => {
                     loadedCount++;
-                    const progress = (loadedCount / resources.length) * 100;
+                    const progress = (loadedCount / totalResources) * 100;
                     updateProgress(progress, `Loading ${label}...`);
-                }).catch(() => {
-                    loadedCount++;
-                    const progress = (loadedCount / resources.length) * 100;
-                    updateProgress(progress, `Loading ${label}...`);
+                }).catch((e) => {
+                    console.warn(`Failed to load ${label}`, e);
+                    loadedCount++; // Count errors as loaded to allow progress to continue
+                    const progress = (loadedCount / totalResources) * 100;
+                    updateProgress(progress, `Skipping ${label}...`);
                 })
             );
         };
 
-        // Wait for fonts to load
-        if (document.fonts) {
-            trackResource(document.fonts.ready, 'fonts');
-        }
+        // 1. Gather all Assets
+        // DOM Images - Deduplicate by SRC to avoid redundant checks
+        const domImages = Array.from(document.querySelectorAll('img'));
+        // Extract unique srcs
+        const uniqueImgSrcs = [...new Set(domImages.map(img => img.src).filter(src => src))];
 
-        // Wait for all images in the hero section and first few memory cards
-        const criticalImages = document.querySelectorAll('img[src*="hero_bg"], img[src*="website_icon"], .memory-card:nth-child(-n+3) img');
-        criticalImages.forEach((img, index) => {
-            if (!img.complete) {
-                trackResource(
-                    new Promise(resolve => {
-                        img.onload = resolve;
-                        img.onerror = resolve;
-                    }),
-                    `image ${index + 1}`
-                );
-            }
-        });
+        const domVideos = Array.from(document.querySelectorAll('video'));
 
-        // Wait for videos to be ready
-        const criticalVideos = document.querySelectorAll('.memory-card:nth-child(-n+3) video');
-        criticalVideos.forEach((video, index) => {
-            if (video.readyState < 3) {
-                trackResource(
-                    new Promise(resolve => {
-                        video.onloadeddata = resolve;
-                        video.onerror = resolve;
-                    }),
-                    `video ${index + 1}`
-                );
-            }
-        });
+        // Gallery Images (paths)
+        const galleryImagePaths = galleryImages; // using hoisted variable
 
-        // Wait for CSS and page load
+        // Songs (paths from playlist)
+        const songPaths = playlist.map(s => s.src);
+
+        // Fonts
+        const fontCheck = document.fonts ? document.fonts.ready : Promise.resolve();
+
+        // Calculate total count for progress
+        // Note: uniqueImgSrcs handles the DOM images. galleryImagePaths handles the gallery.
+        // Some gallery images might be in DOM too, but that's fine, we double check them (or we can dedupe).
+        // For simplicity and robustness, we treat them as separate tasks.
+        totalResources = 1 + uniqueImgSrcs.length + domVideos.length + galleryImagePaths.length + songPaths.length + 1;
+
+        // 2. Start Loading
+
+        // Fonts
         trackResource(
-            new Promise(resolve => {
-                if (document.readyState === 'complete') {
-                    resolve();
-                } else {
-                    window.addEventListener('load', resolve);
-                }
-            }),
-            'page styles'
+            Promise.race([
+                fontCheck,
+                new Promise(resolve => setTimeout(resolve, 3000))
+            ]),
+            'Fonts'
         );
 
-        // Start at 10% to show immediate response
-        updateProgress(10, 'Initializing...');
+        // DOM Images (Force Load via new Image() to bypass lazy loading)
+        uniqueImgSrcs.forEach((src, i) => {
+            const img = new Image();
+            img.src = src;
+            if (img.complete) {
+                loadedCount++;
+            } else {
+                trackResource(new Promise(resolve => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    setTimeout(resolve, 5000); // 5s Timeout
+                }), `Image ${i + 1}`);
+            }
+        });
 
-        // Wait for all promises with a timeout fallback
+        // Gallery Images (Preload)
+        galleryImagePaths.forEach((path, i) => {
+            const img = new Image();
+            img.src = `Assets/Gallery/${path}`;
+            // We duplicate the check here just to be safe/consistent
+            trackResource(new Promise(resolve => {
+                img.onload = resolve;
+                img.onerror = resolve;
+                setTimeout(resolve, 5000); // 5s Timeout
+            }), `Gallery Photo ${i + 1}`);
+        });
+
+        // DOM Videos
+        domVideos.forEach((video, i) => {
+            if (video.readyState >= 3) {
+                loadedCount++;
+            } else {
+                trackResource(new Promise(resolve => {
+                    // One-time listener helper
+                    const onReady = () => {
+                        cleanup();
+                        resolve();
+                    };
+                    const onError = () => {
+                        cleanup();
+                        resolve(); // Resolve on error to continue
+                    };
+
+                    const cleanup = () => {
+                        video.removeEventListener('loadeddata', onReady);
+                        video.removeEventListener('canplay', onReady);
+                        video.removeEventListener('error', onError);
+                    };
+
+                    video.addEventListener('loadeddata', onReady);
+                    video.addEventListener('canplay', onReady); // redundant but safer
+                    video.addEventListener('error', onError);
+
+                    // Timeout
+                    setTimeout(() => {
+                        cleanup();
+                        resolve(); // Timeout resolve
+                    }, 5000);
+                }), `Memory Video ${i + 1}`);
+            }
+        });
+
+        // Songs (Preload Audio)
+        songPaths.forEach((src, i) => {
+            const audio = new Audio();
+            audio.preload = 'auto'; // Force buffer
+            audio.src = src;
+
+            trackResource(new Promise(resolve => {
+                const onReady = () => { cleanup(); resolve(); };
+                const onError = () => { cleanup(); resolve(); };
+                const cleanup = () => {
+                    audio.removeEventListener('canplaythrough', onReady);
+                    audio.removeEventListener('error', onError);
+                };
+
+                audio.addEventListener('canplaythrough', onReady);
+                audio.addEventListener('error', onError);
+
+                // Timeout fallback 
+                setTimeout(() => {
+                    cleanup();
+                    resolve();
+                }, 4000);
+            }), `Song ${i + 1}`);
+        });
+
+        // Window Load
+        trackResource(new Promise(resolve => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', resolve);
+            setTimeout(resolve, 5000);
+        }), 'Finalizing');
+
+        // Initial Progress
+        updateProgress(5, 'Initializing Assets...');
+
+        // Wait for all (with a global max timeout of 10s for the whole batch just in case)
         await Promise.race([
             Promise.all(resources),
-            new Promise(resolve => setTimeout(resolve, 5000)) // Max 5s wait
+            new Promise(resolve => setTimeout(resolve, 15000)) // Max 15s total wait
         ]);
 
-        // Ensure we show 100% before hiding
-        updateProgress(100, 'Ready!');
+        updateProgress(100, 'All Memories Loaded!');
     }
+
 
     if (hasVisited) {
         // Not first time - hide immediately
         loadingScreen.style.display = 'none';
+        // Still loading assets in background safely if needed
     } else {
         // First time - wait for resources then show smooth transition
-        waitForCriticalResources().then(() => {
+        preloadAllAssets().then(() => {
             // Give a moment for smooth rendering
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
@@ -358,6 +669,101 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     }
 
+    // Playlist Logic - Moved to outer scope to ensure it initializes
+    const playlistBtn = document.getElementById('playlistBtn');
+    const playlistPanel = document.getElementById('playlistPanel');
+    const closePlaylistBtn = document.getElementById('closePlaylist');
+    const playlistList = document.getElementById('playlistList');
+
+    function togglePlaylist() {
+        const isHidden = playlistPanel.classList.contains('hidden');
+        if (isHidden) {
+            playlistPanel.classList.remove('hidden');
+            // Render list when opening to ensure fresh state
+            renderPlaylist();
+            playlistBtn.classList.add('active'); // Optional active state style
+        } else {
+            playlistPanel.classList.add('hidden');
+            playlistBtn.classList.remove('active');
+        }
+    }
+
+    function renderPlaylist() {
+        playlistList.innerHTML = '';
+        playlist.forEach((song, index) => {
+            const li = document.createElement('li');
+            li.className = `playlist-item ${index === currentSongIndex ? 'active' : ''}`;
+            li.onclick = (e) => {
+                e.stopPropagation();
+                playSong(index);
+                renderPlaylist(); // Re-render to update active state
+                // Playlist stays open for browsing
+            };
+
+            li.innerHTML = `
+                <div class="playlist-item-info">
+                    <span class="playlist-item-title">${song.title}</span>
+                    <span class="playlist-item-artist">${song.artist}</span>
+                </div>
+                <div class="playing-indicator"></div>
+            `;
+            playlistList.appendChild(li);
+        });
+    }
+
+    playlistBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePlaylist();
+    });
+
+    closePlaylistBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePlaylist();
+    });
+
+    // Prevent closing when clicking inside the playlist to allow scrolling and interaction
+    playlistPanel.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Prevent scrolling of body when scrolling inside playlist
+    playlistPanel.addEventListener('wheel', (e) => {
+        const list = playlistList; // Target the scrollable list explicitly
+        const delta = e.deltaY;
+        const contentHeight = list.scrollHeight;
+        const visibleHeight = list.clientHeight;
+        const scrollTop = list.scrollTop;
+
+        if (visibleHeight >= contentHeight) {
+            // Content fits, so prevent body scroll
+            e.preventDefault();
+            return;
+        }
+
+        // If scrolling up at top OR scrolling down at bottom
+        if ((scrollTop <= 0 && delta < 0) || (Math.ceil(scrollTop + visibleHeight) >= contentHeight && delta > 0)) {
+            e.preventDefault();
+        }
+        e.stopPropagation();
+    }, { passive: false });
+
+    // Close playlist when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!playlistPanel.contains(e.target) && !playlistBtn.contains(e.target) && !playlistPanel.classList.contains('hidden')) {
+            togglePlaylist();
+        }
+    });
+
+    // Update playlist active item when song changes
+    const originalUpdatePlayBtn = updatePlayBtn;
+    updatePlayBtn = function () {
+        originalUpdatePlayBtn();
+        // If playlist is open, refresh highlighting
+        if (!playlistPanel.classList.contains('hidden')) {
+            renderPlaylist();
+        }
+    };
+
     // --- Auto Scroll Feature ---
     const autoScrollManager = {
         idleTimer: null,
@@ -376,13 +782,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         },
 
-        handleUserInteraction(e) {
-            // Ignore programmatic scrolls triggered by our manager
-            if (e && e.type === 'scroll' && scrollManager.isScrolling) {
-                return;
-            }
-
-            // If we were auto-scrolling and user interrupts, reset state
+        stop() {
             if (this.isAutoScrolling) {
                 const currentTarget = scrollManager.targets[scrollManager.currentIndex];
                 const video = currentTarget ? currentTarget.querySelector('video') : null;
@@ -391,17 +791,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     video.loop = true;
                 }
             }
-
             this.isAutoScrolling = false;
+            if (this.idleTimer) clearTimeout(this.idleTimer);
+        },
+
+        handleUserInteraction(e) {
+            // Ignore programmatic scrolls triggered by our manager
+            if (e && e.type === 'scroll' && scrollManager.isScrolling) {
+                return;
+            }
+
+            this.stop();
             this.resetIdleTimer();
         },
 
         resetIdleTimer() {
             if (this.idleTimer) clearTimeout(this.idleTimer);
-            this.idleTimer = setTimeout(() => this.startAutoScroll(), this.idleDelay);
+
+            // Only start auto-scroll timer if music is playing
+            if (bgMusic && !bgMusic.paused) {
+                this.idleTimer = setTimeout(() => this.startAutoScroll(), this.idleDelay);
+            }
         },
 
         startAutoScroll() {
+            // Safety check
+            if (bgMusic && bgMusic.paused) return;
+
             this.isAutoScrolling = true;
             this.processCurrentSection();
         },
@@ -529,15 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.lightbox-overlay').addEventListener('click', () => toggleLightbox());
 
 
-    // Populate Gallery
-    const galleryImages = [
-        'IMG-20260117-WA0011.jpg', 'IMG-20260117-WA0013.jpg', 'IMG-20260117-WA0014.jpg',
-        'IMG-20260117-WA0015.jpg', 'IMG-20260118-WA0035.jpg', 'IMG-20260118-WA0037.jpg',
-        'IMG-20260119-WA0012.jpg', 'IMG-20260119-WA0015.jpg', 'IMG-20260119-WA0022.jpg',
-        'IMG-20260119-WA0023.jpg', 'IMG20250604200831~2.jpg', 'IMG20250605105032.jpg',
-        'IMG20250605105038.jpg', 'IMG20251130160325~2.jpg', 'IMG20251130171445~2.jpg',
-        'IMG20251230172446.jpg'
-    ];
+    // Populate Gallery (Using hoisted 'galleryImages')
 
     galleryImages.forEach(imgName => {
         const item = document.createElement('div');
@@ -721,196 +1129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const artistNameEl = document.querySelector('.artist-name');
     const albumArtEl = document.querySelector('.album-art');
 
-    // Playlist Definition
-    const playlist = [
-        {
-            title: "Sang Rahiyo 🫶",
-            artist: "Anku & Cyru",
-            src: "Assets/Songs/Sang Rahiyo🫶.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Main Tenu Samjhawan 🎶",
-            artist: "Arijit Singh, Shreya Ghoshal",
-            src: "Assets/Songs/MainTenuSamjhanwa.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Dandelions 🌼",
-            artist: "Ruth B.",
-            src: "Assets/Songs/Dandelions🌼.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Tera Ban Jaunga 💍",
-            artist: "Akhil",
-            src: "Assets/Songs/TeraBanJaunga.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "10,000 Hours 🕒",
-            artist: "Dan + Shay, Justin Bieber",
-            src: "Assets/Songs/10,000 Hours.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Kho Gaye Hum Kahan 🌌",
-            artist: "Jasleen Royal, Prateek Kuhad",
-            src: "Assets/Songs/KhoGayeHumKahan.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Perfect 💍",
-            artist: "Ed Sheeran",
-            src: "Assets/Songs/Perfect.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Tum Hi Ho 💖",
-            artist: "Arijit Singh",
-            src: "Assets/Songs/TumHiHo.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Chahun Main Ya Naa 💭",
-            artist: "Arijit Singh",
-            src: "Assets/Songs/ChahunMainYaNaa.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "A Thousand Years ⏳",
-            artist: "Christina Perri",
-            src: "Assets/Songs/A Thousand Years.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Bakhuda Tumhi Ho 🙏",
-            artist: "Atif Aslam, Alka Yagnik",
-            src: "Assets/Songs/BakhudaTumHiHo.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Photograph 📸",
-            artist: "Ed Sheeran",
-            src: "Assets/Songs/Photograph.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Be Intehaan 🌙",
-            artist: "Sunidhi Chauhan, Atif Aslam",
-            src: "Assets/Songs/BeIntehan.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "All of Me",
-            artist: "John Legend",
-            src: "Assets/Songs/All of Me.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Dil Kyun Yeh Mera Shor Kare 💓",
-            artist: "K.K.",
-            src: "Assets/Songs/DilKyunYehMeraShorKare.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "I Think They Call This Love",
-            artist: "Elliot James Reay",
-            src: "Assets/Songs/I Think They Call This Love.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Bheegi Si Bhaagi Si ☔",
-            artist: "Udit Narayan, Shreya Ghoshal",
-            src: "Assets/Songs/BheegiSiBhaagiSi.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Darasal ✨",
-            artist: "Atif Aslam",
-            src: "Assets/Songs/Darasal.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Lae Dooba 🌊",
-            artist: "Arijit Singh",
-            src: "Assets/Songs/LaeDooba.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Love Me Thoda Aur 💞",
-            artist: "Arijit Singh",
-            src: "Assets/Songs/LoveMeThodaAur.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Mera Pehla Pehla Pyaar 💝",
-            artist: "K.K.",
-            src: "Assets/Songs/MeraPehlaPehlaPyaar.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Nazm Nazm 📜",
-            artist: "Arko",
-            src: "Assets/Songs/NazmNazm.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Pehli Nazar Mein 👀",
-            artist: "Atif Aslam",
-            src: "Assets/Songs/PehliNazarMein.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Raabta 🔗",
-            artist: "Arijit Singh",
-            src: "Assets/Songs/Raabta.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Soniyo 🌸",
-            artist: "Shreya Ghoshal",
-            src: "Assets/Songs/Soniyo.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Subhanallah 🌟",
-            artist: "Sreeram, Shilpa Rao",
-            src: "Assets/Songs/Subhanallah.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Sukoon Mila 🕊️",
-            artist: "Arijit Singh",
-            src: "Assets/Songs/SukoonMila.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Te Amo 🌹",
-            artist: "Ash King, Shashaa Tirupati",
-            src: "Assets/Songs/TeAmo.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Tera Chehra 😍",
-            artist: "Adnan Sami",
-            src: "Assets/Songs/TeraChehra.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Tu Hain Tho 🎵",
-            artist: "Pritam, Rahul Mishra",
-            src: "Assets/Songs/TuHainTho.webm",
-            art: "Assets/website_icon.png"
-        },
-        {
-            title: "Tum Mile 🌈",
-            artist: "Neeraj Shridhar",
-            src: "Assets/Songs/TumMile.webm",
-            art: "Assets/website_icon.png"
-        }
-
-    ];
+    // Playlist Definition (Using hoisted 'playlist')
 
     // Initial State
     let currentSongIndex = 0;
@@ -1023,6 +1242,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             pauseAudio();
         }
+    }
+
+    function playSong(index) {
+        currentSongIndex = index;
+        loadSong(playlist[currentSongIndex]);
+        playAudio();
     }
 
     function handleSongEnd() {
@@ -1164,8 +1389,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handlers
     bgMusic.addEventListener('ended', handleSongEnd);
-    bgMusic.addEventListener('play', updatePlayBtn);
-    bgMusic.addEventListener('pause', updatePlayBtn);
+    bgMusic.addEventListener('play', () => {
+        updatePlayBtn();
+        autoScrollManager.resetIdleTimer();
+    });
+    bgMusic.addEventListener('pause', () => {
+        updatePlayBtn();
+        autoScrollManager.stop();
+    });
 
     // Initial Sync
     volumeBar.value = userVolume;
@@ -1258,6 +1489,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         robustAutoplay();
+
+
     }
 });
 

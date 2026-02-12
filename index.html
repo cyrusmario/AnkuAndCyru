@@ -76,7 +76,6 @@
             <div id="yesTimestamp" class="stamp-time"></div>
         </div>
         <div class="scroll-indicator" id="scrollIndicator">
-            <p>Scroll down for our story</p>
             <div class="arrow"></div>
         </div>
     </section>
@@ -105,7 +104,7 @@
             <div class="timeline">
 
                 <!-- Memory 1 -->
-                <div class="memory-card reveal">
+                <div id="memory1" class="memory-card reveal">
                     <div class="memory-image">
                         <img src="Assets/Images/memory1_new.jpg" alt="Our first memory" loading="lazy">
                     </div>
@@ -117,7 +116,7 @@
                 </div>
 
                 <!-- Memory 2 -->
-                <div class="memory-card reveal">
+                <div id="memory2" class="memory-card reveal">
                     <div class="memory-content">
                         <span class="date">August 17, 2024</span>
                         <h3>After Work Cozy Video Call Dates</h3>
@@ -135,7 +134,7 @@
                 </div>
 
                 <!-- Memory 3 -->
-                <div class="memory-card reveal">
+                <div id="memory3" class="memory-card reveal">
                     <div class="memory-image">
                         <img src="Assets/Images/memory3_new.jpg" alt="Love Forever Collage" loading="lazy">
                     </div>
@@ -147,7 +146,7 @@
                 </div>
 
                 <!-- Memory 4 -->
-                <div class="memory-card reveal">
+                <div id="memory4" class="memory-card reveal">
                     <div class="memory-content">
                         <span class="date">The Long Journey</span>
                         <h3>Destined from the Start</h3>
@@ -161,7 +160,7 @@
                 </div>
 
                 <!-- Memory 5 -->
-                <div class="memory-card reveal">
+                <div id="memory5" class="memory-card reveal">
                     <div class="memory-image">
                         <img src="Assets/Images/memory6.jpg" alt="Our life together collage" loading="lazy">
                     </div>
@@ -175,7 +174,7 @@
                 </div>
 
                 <!-- Memory 6 -->
-                <div class="memory-card reveal">
+                <div id="memory6" class="memory-card reveal">
                     <div class="memory-content">
                         <span class="date">Aise Hi Paise Kamate Raho</span>
                         <h3>The Million Dollar Smile</h3>
@@ -188,7 +187,7 @@
                 </div>
 
                 <!-- Memory 7 -->
-                <div class="memory-card reveal">
+                <div id="memory7" class="memory-card reveal">
                     <div class="memory-image">
                         <img src="Assets/Images/memory8.jpg" alt="Us forever collage" loading="lazy">
                     </div>
@@ -202,7 +201,7 @@
                 </div>
 
                 <!-- Memory 8 -->
-                <div class="memory-card reveal">
+                <div id="memory8" class="memory-card reveal">
                     <div class="memory-content">
                         <span class="date">Purely You</span>
                         <h3>Your Magical Heart</h3>
@@ -216,7 +215,7 @@
                 </div>
 
                 <!-- Memory 9 -->
-                <div class="memory-card reveal">
+                <div id="memory9" class="memory-card reveal">
                     <div class="memory-image">
                         <img src="Assets/Images/memory4_new_couple.jpg" alt="Happy couple moment" loading="lazy">
                     </div>
@@ -229,7 +228,7 @@
                 </div>
 
                 <!-- Memory 10 -->
-                <div class="memory-card reveal">
+                <div id="memory10" class="memory-card reveal">
                     <div class="memory-content">
                         <span class="date">A Labor of Love</span>
                         <h3>Woven with Heart</h3>
@@ -243,7 +242,7 @@
                 </div>
 
                 <!-- Memory 11 -->
-                <div class="memory-card reveal">
+                <div id="memory11" class="memory-card reveal">
                     <div class="memory-image">
                         <img src="Assets/Images/memory_hoodie.jpg" alt="Funny hoodie moment" loading="lazy">
                     </div>
@@ -257,7 +256,7 @@
                 </div>
 
                 <!-- Memory 12 -->
-                <div class="memory-card reveal">
+                <div id="memory12" class="memory-card reveal">
                     <div class="memory-content">
                         <span class="date">Moments in Motion</span>
                         <h3>Captured Magic</h3>
@@ -273,7 +272,7 @@
                 </div>
 
                 <!-- Memory 13 -->
-                <div class="memory-card reveal">
+                <div id="memory13" class="memory-card reveal">
                     <div class="memory-image">
                         <video muted loop class="memory-video" preload="auto">
                             <source src="Assets/Videos/memory13.mp4" type="video/mp4">
@@ -335,6 +334,9 @@
                 <button id="loopBtn" type="button" class="control-btn" title="Loop Mode" aria-label="Loop Mode">
                     <i class="fa-solid fa-repeat"></i>
                 </button>
+                <button id="playlistBtn" type="button" class="control-btn" title="Playlist" aria-label="Show Playlist">
+                    <i class="fa-solid fa-list-ul"></i>
+                </button>
             </div>
             <div class="progress-area">
                 <span id="currentTime" class="time-text">0:00</span>
@@ -351,6 +353,18 @@
                     class="fa-solid fa-volume-high"></i></button>
             <input type="range" id="volumeBar" min="0" max="1" step="0.01" value="0.4" class="volume-slider"
                 aria-label="Volume Control">
+        </div>
+
+        <!-- Playlist Panel -->
+        <div class="playlist-panel hidden" id="playlistPanel">
+            <div class="playlist-header">
+                <h3>Our Mixtape</h3>
+                <button id="closePlaylist" type="button" class="close-playlist-btn" aria-label="Close Playlist"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <ul class="playlist-list" id="playlistList">
+                <!-- Songs will be injected here via JS -->
+            </ul>
         </div>
     </div>
 
