@@ -78,7 +78,7 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /* --- Hero Section --- */
