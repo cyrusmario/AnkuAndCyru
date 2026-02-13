@@ -197,10 +197,13 @@ body {
     transform: rotate(15deg);
     z-index: 10;
     pointer-events: none;
-    animation: stampSpring 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.yes-stamp:not(.hidden) {
+    display: flex;
+    animation: stampSpring 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 .stamp-content {

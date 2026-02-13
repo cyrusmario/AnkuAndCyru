@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showSuccessState(shouldScroll, timestamp) {
         contentSection.classList.remove('hidden');
         yesStamp.classList.remove('hidden');
+        yesStamp.style.display = '';  // Clear inline display:none
         scrollIndicator.style.display = 'flex';
 
         if (timestamp) yesTimestamp.textContent = timestamp;
