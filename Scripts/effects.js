@@ -14,10 +14,13 @@ const Effects = (() => {
 
     // --- Single-click: Roses burst from edges ---
     function createEdgeRoses(container) {
-        const count = 18;
+        const rect = container.getBoundingClientRect();
+        const w = rect.width;
+        const h = rect.height;
+        if (w === 0 || h === 0) return; // Skip if container has no dimensions
+
+        const count = 12;
         const fragment = document.createDocumentFragment();
-        const w = container.offsetWidth;
-        const h = container.offsetHeight;
         const batch = [];
         const edges = ['top', 'bottom', 'left', 'right'];
 
@@ -57,15 +60,20 @@ const Effects = (() => {
         }
 
         container.appendChild(fragment);
+        // Force a reflow to ensure animation starts
+        void container.offsetHeight;
         setTimeout(() => batch.forEach(r => r.parentNode && r.remove()), 6000);
     }
 
     // --- Double-click: Heart-shaped burst ---
     function createHeartRoses(container) {
-        const count = 28;
+        const rect = container.getBoundingClientRect();
+        const w = rect.width;
+        const h = rect.height;
+        if (w === 0 || h === 0) return; // Skip if container has no dimensions
+
+        const count = 20;
         const fragment = document.createDocumentFragment();
-        const w = container.offsetWidth;
-        const h = container.offsetHeight;
         const centerX = w / 2;
         const centerY = h / 2;
         const batch = [];
@@ -100,6 +108,8 @@ const Effects = (() => {
         }
 
         container.appendChild(fragment);
+        // Force a reflow to ensure animation starts
+        void container.offsetHeight;
         setTimeout(() => batch.forEach(r => r.parentNode && r.remove()), 6000);
     }
 
@@ -140,31 +150,34 @@ const Effects = (() => {
     // --- Falling hearts celebration ---
     function createHearts() {
         const fragment = document.createDocumentFragment();
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 30; i++) {
             const heart = document.createElement('div');
             heart.className = 'heart-particle';
             heart.innerHTML = '❤️';
+            const delay = Math.random() * 3;
+            const duration = Math.random() * 3 + 2;
             Object.assign(heart.style, {
                 left: Math.random() * 100 + 'vw',
-                animationDelay: Math.random() * 3 + 's',
+                animationDelay: delay + 's',
                 fontSize: (Math.random() * 20 + 10) + 'px',
                 position: 'fixed',
                 top: '-20px',
                 zIndex: '1000',
                 pointerEvents: 'none',
-                animation: `fall ${Math.random() * 3 + 2}s linear forwards`,
+                animation: `fall ${duration}s linear ${delay}s forwards`,
             });
             fragment.appendChild(heart);
         }
         document.body.appendChild(fragment);
         setTimeout(() => {
             document.querySelectorAll('.heart-particle').forEach(h => h.remove());
-        }, 5000);
+        }, 6000);
     }
 
     // --- Background floating hearts ---
     function initBackgroundHearts() {
-        for (let i = 0; i < 40; i++) {
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < 20; i++) {
             const heart = document.createElement('div');
             heart.classList.add('bg-heart');
             heart.innerHTML = '❤️';
@@ -174,8 +187,9 @@ const Effects = (() => {
                 fontSize: `${Math.random() * 20 + 10}px`,
                 animationDelay: `${Math.random() * -30}s`,
             });
-            document.body.appendChild(heart);
+            fragment.appendChild(heart);
         }
+        document.body.appendChild(fragment);
     }
 
     return {

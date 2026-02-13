@@ -59,7 +59,8 @@ body {
     z-index: -1;
     pointer-events: none;
     animation: floatUpBg linear infinite;
-    will-change: transform;
+    will-change: transform, opacity;
+    contain: layout style;
 }
 
 /* --- Reusable Components --- */
@@ -305,6 +306,7 @@ body {
 .memory-image {
     position: relative;
     border-radius: 20px;
+    overflow: hidden;
 }
 
 .memory-image img,
@@ -378,10 +380,11 @@ body {
 
 .falling-rose {
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     pointer-events: none;
     font-size: 22px;
     opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0);
     will-change: transform, opacity;
     animation: heartBurst var(--dur, 3s) cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
