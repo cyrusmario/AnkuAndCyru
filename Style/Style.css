@@ -286,6 +286,7 @@ body {
 }
 
 .memory-card {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
@@ -306,7 +307,6 @@ body {
 .memory-image {
     position: relative;
     border-radius: 20px;
-    overflow: hidden;
 }
 
 .memory-image img,
@@ -380,7 +380,7 @@ body {
 
 .falling-rose {
     position: absolute;
-    z-index: 3;
+    z-index: 10;
     pointer-events: none;
     font-size: 22px;
     opacity: 0;

@@ -12,14 +12,33 @@ const Effects = (() => {
         return { x: x / 17, y: y / 17 };
     }
 
-    // --- Single-click: Roses burst from edges ---
-    function createEdgeRoses(container) {
-        const rect = container.getBoundingClientRect();
-        const w = rect.width;
-        const h = rect.height;
-        if (w === 0 || h === 0) return; // Skip if container has no dimensions
+    // --- Get the .memory-card parent, or fall back to the container itself ---
+    function getRoseTarget(imgContainer) {
+        const card = imgContainer.closest('.memory-card');
+        return card || imgContainer;
+    }
 
-        const count = 12;
+    // --- Calculate image offset within the card ---
+    function getImageOffsetInCard(imgContainer, card) {
+        const imgRect = imgContainer.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        return {
+            offsetX: imgRect.left - cardRect.left,
+            offsetY: imgRect.top - cardRect.top,
+            w: imgRect.width,
+            h: imgRect.height,
+        };
+    }
+
+    // --- Single-click: Roses burst from image edges and spread outward ---
+    function createEdgeRoses(imgContainer) {
+        const card = getRoseTarget(imgContainer);
+        const imgRect = imgContainer.getBoundingClientRect();
+        if (imgRect.width === 0 || imgRect.height === 0) return;
+
+        const { offsetX, offsetY, w, h } = getImageOffsetInCard(imgContainer, card);
+
+        const count = 14;
         const fragment = document.createDocumentFragment();
         const batch = [];
         const edges = ['top', 'bottom', 'left', 'right'];
@@ -30,15 +49,15 @@ const Effects = (() => {
             rose.textContent = ROSE_EMOJIS[Math.floor(Math.random() * ROSE_EMOJIS.length)];
 
             const edge = edges[Math.floor(Math.random() * edges.length)];
-            const travel = 60 + Math.random() * 120;
-            const drift = (Math.random() - 0.5) * 80;
+            const travel = 80 + Math.random() * 150;
+            const drift = (Math.random() - 0.5) * 120;
             let startX, startY, tx, ty;
 
             switch (edge) {
-                case 'top': startX = Math.random() * w; startY = 0; tx = drift; ty = -travel; break;
-                case 'bottom': startX = Math.random() * w; startY = h; tx = drift; ty = travel; break;
-                case 'left': startX = 0; startY = Math.random() * h; tx = -travel; ty = drift; break;
-                case 'right': startX = w; startY = Math.random() * h; tx = travel; ty = drift; break;
+                case 'top': startX = offsetX + Math.random() * w; startY = offsetY; tx = drift; ty = -travel; break;
+                case 'bottom': startX = offsetX + Math.random() * w; startY = offsetY + h; tx = drift; ty = travel; break;
+                case 'left': startX = offsetX; startY = offsetY + Math.random() * h; tx = -travel; ty = drift; break;
+                case 'right': startX = offsetX + w; startY = offsetY + Math.random() * h; tx = travel; ty = drift; break;
             }
 
             const size = 18 + Math.random() * 16;
@@ -59,25 +78,25 @@ const Effects = (() => {
             batch.push(rose);
         }
 
-        container.appendChild(fragment);
-        // Force a reflow to ensure animation starts
-        void container.offsetHeight;
+        card.appendChild(fragment);
+        void card.offsetHeight;
         setTimeout(() => batch.forEach(r => r.parentNode && r.remove()), 6000);
     }
 
-    // --- Double-click: Heart-shaped burst ---
-    function createHeartRoses(container) {
-        const rect = container.getBoundingClientRect();
-        const w = rect.width;
-        const h = rect.height;
-        if (w === 0 || h === 0) return; // Skip if container has no dimensions
+    // --- Double-click: Heart-shaped burst from image center ---
+    function createHeartRoses(imgContainer) {
+        const card = getRoseTarget(imgContainer);
+        const imgRect = imgContainer.getBoundingClientRect();
+        if (imgRect.width === 0 || imgRect.height === 0) return;
 
-        const count = 20;
+        const { offsetX, offsetY, w, h } = getImageOffsetInCard(imgContainer, card);
+
+        const count = 22;
         const fragment = document.createDocumentFragment();
-        const centerX = w / 2;
-        const centerY = h / 2;
+        const centerX = offsetX + w / 2;
+        const centerY = offsetY + h / 2;
         const batch = [];
-        const scale = Math.max(w, h, 200) * 0.65 + 40;
+        const scale = Math.max(w, h, 200) * 0.7 + 50;
 
         for (let i = 0; i < count; i++) {
             const rose = document.createElement('div');
@@ -107,9 +126,8 @@ const Effects = (() => {
             batch.push(rose);
         }
 
-        container.appendChild(fragment);
-        // Force a reflow to ensure animation starts
-        void container.offsetHeight;
+        card.appendChild(fragment);
+        void card.offsetHeight;
         setTimeout(() => batch.forEach(r => r.parentNode && r.remove()), 6000);
     }
 
