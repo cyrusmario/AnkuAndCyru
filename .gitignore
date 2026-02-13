@@ -1,0 +1,18 @@
+# Developer tools and backups (not for production)
+_dev/
+
+# OS-generated files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Old root-level icon copies (now in Assets/Images/)
+Assets/website_icon.png
+Assets/website_icon.jpg
