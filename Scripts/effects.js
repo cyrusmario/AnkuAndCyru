@@ -49,8 +49,8 @@ const Effects = (() => {
             rose.textContent = ROSE_EMOJIS[Math.floor(Math.random() * ROSE_EMOJIS.length)];
 
             const edge = edges[Math.floor(Math.random() * edges.length)];
-            const travel = 80 + Math.random() * 150;
-            const drift = (Math.random() - 0.5) * 120;
+            const travel = 150 + Math.random() * 200;
+            const drift = (Math.random() - 0.5) * 200;
             let startX, startY, tx, ty;
 
             switch (edge) {
@@ -96,7 +96,7 @@ const Effects = (() => {
         const centerX = offsetX + w / 2;
         const centerY = offsetY + h / 2;
         const batch = [];
-        const scale = Math.max(w, h, 200) * 0.7 + 50;
+        const scale = Math.max(w, h, 200) * 0.9 + 80;
 
         for (let i = 0; i < count; i++) {
             const rose = document.createElement('div');

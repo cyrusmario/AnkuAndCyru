@@ -306,6 +306,7 @@ body {
 
 .memory-image {
     position: relative;
+    z-index: 2;
     border-radius: 20px;
 }
 
@@ -380,7 +381,7 @@ body {
 
 .falling-rose {
     position: absolute;
-    z-index: 10;
+    z-index: 1;
     pointer-events: none;
     font-size: 22px;
     opacity: 0;
