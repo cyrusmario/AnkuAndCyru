@@ -6,7 +6,7 @@
 // true  = Force "She Said Yes" state (Stamp & Content visible)
 // false = Force "Initial" state (Yes/No Buttons visible)
 // null  = Use Browser Memory (Normal User Experience)
-const SHOW_ACCEPTED_VIEW = null;
+const SHOW_ACCEPTED_VIEW = true;
 
 // Toggle individual memory cards on/off
 const MEMORY_CONTROLS = {
