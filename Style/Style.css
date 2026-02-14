@@ -374,6 +374,364 @@ body {
     scroll-margin-top: 100px;
 }
 
+/* --- Locked Content & Modal --- */
+/* --- Locked Content & Modal --- */
+.locked-content>*:not(.lock-overlay) {
+    filter: blur(30px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 12, 41, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    gap: 15px;
+    z-index: 10;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background 0.3s;
+}
+
+.lock-overlay:hover {
+    background: rgba(15, 12, 41, 0.6);
+}
+
+.lock-overlay i {
+    font-size: 3rem;
+    color: var(--primary-pink);
+    animation: pulseLoader 2s infinite;
+}
+
+.unlock-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.unlock-content {
+    background: rgba(15, 12, 41, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.unlock-content .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    z-index: 10001;
+    display: flex !important;
+}
+
+#closeUnlockModal {
+    position: absolute;
+    top: -50px;
+    /* Move totally outside the heart/card */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-light);
+    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 99999;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#closeUnlockModal:hover {
+    background: var(--primary-pink);
+    color: white;
+    transform: translateX(-50%) rotate(90deg);
+    border-color: var(--primary-pink);
+}
+
+.unlock-content .close-btn:hover {
+    color: var(--primary-pink);
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+}
+
+/* --- Re-lock Buttons --- */
+.relock-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(15, 12, 41, 0.6);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.relock-btn:hover {
+    background: var(--primary-pink);
+    color: white;
+    transform: rotate(15deg);
+}
+
+.relock-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--dark-bg);
+    color: var(--primary-pink);
+    border: 1px solid var(--primary-pink);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.relock-badge:hover {
+    background: var(--primary-pink);
+    color: white;
+}
+
+.lock-icon-lg {
+    font-size: 4rem;
+    color: var(--primary-pink);
+    margin-bottom: 20px;
+}
+
+/* --- Website Lock --- */
+.locked-website {
+    overflow: hidden !important;
+}
+
+.website-lock-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(20px);
+}
+
+.website-lock-overlay::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 77, 109, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.website-lock-overlay .lock-content {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 60px 40px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: var(--text-light);
+    animation: fadeInUp 0.8s ease-out;
+    max-width: 450px;
+    width: 90%;
+}
+
+.website-lock-overlay i.fa-lock {
+    font-size: 5rem;
+    color: var(--primary-pink);
+    margin-bottom: 25px;
+    filter: drop-shadow(0 0 15px var(--primary-pink));
+    animation: floatUpBg 6s ease-in-out infinite alternate;
+}
+
+.website-lock-overlay h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #ff4d6d, #ffb3c1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.website-lock-overlay p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* Reusing .input-group and buttons from main modal, but enhancing for site lock */
+.website-lock-overlay .input-group input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+    font-size: 1.1rem;
+}
+
+.website-lock-overlay .btn-unlock {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.site-relock-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    background: rgba(15, 12, 41, 0.9);
+    border: 2px solid var(--primary-pink);
+    border-radius: 50%;
+    color: var(--primary-pink);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(255, 77, 109, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.site-relock-btn:hover {
+    background: var(--primary-pink);
+    color: white;
+    transform: rotate(15deg) scale(1.15);
+    box-shadow: 0 0 30px rgba(255, 77, 109, 0.6);
+}
+
+.unlock-content h2 {
+    color: var(--text-light);
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#unlockPassword {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 25px;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#unlockPassword:focus {
+    border-color: var(--primary-pink);
+}
+
+.btn-unlock {
+    padding: 10px 20px;
+    background: var(--primary-pink);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.btn-unlock:hover {
+    background: var(--secondary-pink);
+}
+
+.error-msg {
+    color: #ff4d4d;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    visibility: hidden;
+    height: 20px;
+}
+
+.shake {
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
 /* --- Effects & Animations --- */
 .heart-particle {
     position: fixed;

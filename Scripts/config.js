@@ -25,6 +25,27 @@ const MEMORY_CONTROLS = {
     memory13: true,
 };
 
+// Locked sections: ID -> Password (null means unlocked)
+const LOCKED_FEATURES = {
+    // 'id': 'password' (set to null to unlock)
+    'website': 'us',
+    'gallery': 'Mariocyrus6',
+    'story': null,
+    'memory1': null,
+    'memory2': null,
+    'memory3': null,
+    'memory4': null,
+    'memory5': null,
+    'memory6': null,
+    'memory7': null,
+    'memory8': null,
+    'memory9': null,
+    'memory10': null,
+    'memory11': null,
+    'memory12': null,
+    'memory13': 'Mariocyrus6',
+};
+
 // Gallery image filenames (relative to Assets/Gallery/)
 const GALLERY_IMAGES = [
     'IMG-20260117-WA0011.jpg', 'IMG-20260117-WA0013.jpg', 'IMG-20260117-WA0014.jpg',

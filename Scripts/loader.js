@@ -115,9 +115,9 @@ const Loader = (() => {
         const domVideos = Array.from(document.querySelectorAll('video'));
         const songPaths = PLAYLIST.map(s => s.src);
 
-        // Count: fonts + domImages + galleryImages + videos + songs + window.load
+        // Count: fonts + domImages + galleryImages + videos + 1 song + window.load
         totalResources = 1 + domImages.length + GALLERY_IMAGES.length +
-            domVideos.length + songPaths.length + 1;
+            domVideos.length + (songPaths.length > 0 ? 1 : 0) + 1;
 
         updateProgress(2, 'Gathering assets...');
 
@@ -156,13 +156,26 @@ const Loader = (() => {
             );
         });
 
-        // --- Songs (retry up to 3 times — critical) ---
-        songPaths.forEach((src, i) => {
+        // --- Songs (Critical Optimization: Only load the first one) ---
+        // Identify which song to load first (match logic in player.js)
+        let initialSongIndex = 0;
+        try {
+            const saved = localStorage.getItem('lastSongIndex');
+            if (saved !== null) {
+                const idx = parseInt(saved, 10);
+                if (!isNaN(idx) && idx >= 0 && idx < PLAYLIST.length) {
+                    initialSongIndex = idx;
+                }
+            }
+        } catch (e) { }
+
+        // Only preload the active song
+        if (songPaths[initialSongIndex]) {
             tasks.push(
-                withRetry(loadSong(src), 3, 2000)
-                    .then(ok => onLoaded(`Song ${i + 1}`, ok))
+                withRetry(loadSong(songPaths[initialSongIndex]), 3, 2000)
+                    .then(ok => onLoaded(`Initial Song`, ok))
             );
-        });
+        }
 
         // --- Window load ---
         tasks.push(
@@ -193,7 +206,7 @@ const Loader = (() => {
 
     function init() {
         // Always show loading screen and wait for all assets
-        preloadAllAssets().then(() => {
+        return preloadAllAssets().then(() => {
             dismiss();
         });
     }

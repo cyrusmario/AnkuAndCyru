@@ -22,13 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Initialize All Modules ---
-    Loader.init();
+    // --- Initialize All Modules ---
+    // Loader.init() is called at the end now to chain logic
     MusicPlayer.init();
     ScrollManager.init();
     AutoScrollManager.init();
     Effects.initBackgroundHearts();
     Effects.initImageEffects();
+    Effects.initImageEffects();
     Gallery.init();
+    LockManager.init();
 
     // --- Intersection Observer for Reveal Animations ---
     const revealObserver = new IntersectionObserver(entries => {
@@ -149,8 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const savedTime = localStorage.getItem('sheSaidYesTime') || '14th February 2026';
 
-    if (hasSaidYes) {
-        showSuccessState(false, savedTime);
-        MusicPlayer.robustAutoplay();
-    }
+    // STARTUP LOGIC: Wait for Loader, then check state
+    Loader.init().then(() => {
+        if (hasSaidYes) {
+            showSuccessState(false, savedTime);
+
+            // Only autoplay if NOT locked
+            if (!LockManager.isWebsiteLocked()) {
+                MusicPlayer.robustAutoplay();
+            }
+        }
+    });
 });

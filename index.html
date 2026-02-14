@@ -397,11 +397,29 @@
         </div>
     </div>
 
+    <!-- Unlock Modal -->
+    <div id="unlockModal" class="unlock-modal hidden">
+        <div class="unlock-content glass-card">
+            <button id="closeUnlockModal" type="button" class="close-btn" aria-label="Close Unlock Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <i class="fa-solid fa-lock lock-icon-lg"></i>
+            <h2>Unlock This Memory</h2>
+            <p>Enter the secret password to view this content.</p>
+            <div class="input-group">
+                <input type="password" id="unlockPassword" placeholder="Enter password..." autocomplete="off">
+                <button id="unlockSubmitBtn" type="button" class="btn btn-unlock">Unlock</button>
+            </div>
+            <p id="unlockError" class="error-msg">Incorrect password!</p>
+        </div>
+    </div>
+
     <!-- Scripts: config first (data), then modules, then app (orchestrator) -->
     <script src="Scripts/config.js"></script>
     <script src="Scripts/loader.js"></script>
     <script src="Scripts/scroll.js"></script>
     <script src="Scripts/player.js"></script>
+    <script src="Scripts/lock.js"></script>
     <script src="Scripts/effects.js"></script>
     <script src="Scripts/gallery.js"></script>
     <script src="Scripts/app.js" defer></script>
